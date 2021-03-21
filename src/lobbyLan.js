@@ -15,7 +15,7 @@ export default function(mudarTela) {
             };
 
             const input = document.createElement('input');
-            input.placeholder = "IP:PORTA/ID -> Enter";
+            input.placeholder = "IP:8181/ID -> Enter";
             input.onkeypress = (ev) => {
                 if (ev.code === "Enter") {
                     const nome = document.querySelector("#option > input").value;

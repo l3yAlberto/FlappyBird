@@ -43,7 +43,7 @@ ipcMain.on('host', async (eventHost, nome) => {
     socket = dgram.createSocket('udp4');
     let salaId;
 
-    worker.once('message', (msg) => {
+    worker.on('message', (msg) => {
         switch (msg.type) {
             case "start":
                 console.log("Partida iniciada");
@@ -75,6 +75,7 @@ ipcMain.on('host', async (eventHost, nome) => {
 function closeConnection() {
     try {
         worker.postMessage && worker.postMessage("close");
+        worker.removeAllListeners && worker.removeAllListeners("message")
         worker.terminate && worker.terminate();
         socket.close && socket.close();
     } catch (error) {}

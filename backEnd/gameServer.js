@@ -7,7 +7,6 @@
 module.exports = function() {
     return {
         animation: require('./requestAnimationFrame')(),
-        stack: 0,
         break: false,
         start: false,
         jogadores: [],
@@ -111,7 +110,7 @@ module.exports = function() {
                     type: "game"
                 });
                 for (const jogador of this.jogadores) jogador.sendEvent(game);
-                setTimeout(() => this.sendState(), 10);
+                // setTimeout(() => this.sendState(), 10);
             } else {
                 for (const jogador of this.jogadores) jogador.sendEvent(`{"type":"endgame"}`);
                 this.stop();
@@ -121,6 +120,7 @@ module.exports = function() {
             if (this.break) return;
             this.attPipe();
             this.attFlappy();
+            this.sendState();
             this.animation.requestAnimationFrame(() => this.loop());
         }
     }

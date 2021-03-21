@@ -71,13 +71,8 @@ export default function(mudarTela, args) {
             const self = this;
             const ws = new WebSocket(`ws://${args.ip}`);
             menuBt.onclick = () => {
-                this.span.remove();
-                rank.remove();
-                salaIdSpan.remove();
-                sprites.canvas.onclick = () => {};
-                if (ws && ws.readyState == ws.OPEN) {
-                    ws.close();
-                } else mudarTela(menu(mudarTela));
+                rm();
+                if (ws && ws.readyState == ws.OPEN) ws.close();
             };
 
             ws.onopen = (event) => {
@@ -139,12 +134,7 @@ export default function(mudarTela, args) {
                 }                
             };
 
-            ws.onclose = (event) => {
-                this.span.remove();
-                rank.remove();
-                salaIdSpan.remove();
-                mudarTela(menu(mudarTela));
-            }
+            ws.onclose = (event) => rm();
 
             this.attRank = async () => {
                 const jogadores = self.jogadores.slice().sort((a, b) => {
@@ -174,6 +164,16 @@ export default function(mudarTela, args) {
                         self.rank[i].p.innerText = p || "";
                     }
                 }
+            }
+
+            function rm() {
+                if (ws) ws.onclose = ()=>{};
+                if (menuBt) menuBt.onclick = ()=>{};
+                sprites.canvas.onclick = ()=>{};
+                self.span.remove();
+                rank.remove();
+                salaIdSpan.remove();
+                mudarTela(menu(mudarTela));
             }
         },
         desenha(){

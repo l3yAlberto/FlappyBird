@@ -5,8 +5,12 @@ import sprites from './sprites.js';
 export default function(mudarTela) {
     return {
         inicializa(){
+            const option = document.getElementById('option');
+            if (option) option.remove();
+
             const menu = document.querySelector("#menu");
             menu.style = "visibility: hidden !important;";
+            menu.onclick = () => {};
             ipcRenderer.removeAllListeners("getUsername");
             const gameDiv = document.getElementById('game-div');
             const div =  document.createElement('div');

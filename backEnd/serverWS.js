@@ -18,8 +18,8 @@ parentPort && parentPort.on('message', (value) => {
 
 wss.on('connection', function connectionWebSocket(ws) {
   let idTimeout;
-  let id;
   let sala;
+  let id;
 
   ws.on('message', (message) => {
     const msgJson = JSON.parse(message.toString());
@@ -29,7 +29,7 @@ wss.on('connection', function connectionWebSocket(ws) {
         break;
       case "join":
         sala = salas[msgJson.salaId];
-        if (!sala || (sala && sala.start)) ws.close();
+        if (!sala || (sala && (sala.start || sala.break))) ws.close();
         else join(msgJson.nome, msgJson.salaId);
         break;
       case "salas":
@@ -51,8 +51,8 @@ wss.on('connection', function connectionWebSocket(ws) {
       case "start":
         clearTimeout(idTimeout);
         if (sala.start) return;
-        parentPort && parentPort.postMessage({ type: "start" });
         sala.start = true;
+        parentPort && parentPort.postMessage({ type: "start" });
         const nomes = [];
         for (const jogador of sala.jogadores) nomes.push({ nome: jogador.nome, id: jogador.game.id });
         const msg = JSON.stringify({ type: "nomes", nomes: nomes });
@@ -69,7 +69,7 @@ wss.on('connection', function connectionWebSocket(ws) {
         salas[salaId].inicializaPipe();
         sala = salas[salaId];
         join(msgJson.owner, salaId);
-        salas[salaId].sendState();
+        // salas[salaId].sendState();
         parentPort && parentPort.postMessage({ type: "salaId", salaId: salaId});
         ws.send(JSON.stringify({ type: "host" }));
         break;
@@ -107,6 +107,7 @@ wss.on('connection', function connectionWebSocket(ws) {
   function join(nome, salaId) {
     id = sala.novoJogador(async (arg) => ws.readyState === ws.OPEN && ws.send(arg), nome);
     ws.send(JSON.stringify({ type: "id", id: id, salaId: salaId }));
+    sala.sendState();
   }
 });
 
