@@ -7,15 +7,14 @@ require('./backEnd/lan');
 function createWindow () {
     const win = new BrowserWindow({
         resizable: false,
-        height: 553,
+        height: 533,
         width: 1000,
-        // height: 700,
         maximizable: false,
         webPreferences: {
             nodeIntegration: true
         }
     })
-
+    win.removeMenu();
     win.loadFile('index.html');
     // win.webContents.openDevTools();
 }
