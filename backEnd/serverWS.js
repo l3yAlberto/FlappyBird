@@ -30,7 +30,7 @@ wss.on('connection', function connectionWebSocket(ws) {
       case "join":
         sala = salas[msgJson.salaId];
         if (!sala || (sala && sala.start)) ws.close();
-        else join(msgJson.nome);
+        else join(msgJson.nome, msgJson.salaId);
         break;
       case "salas":
         const salasOb = {
@@ -68,7 +68,7 @@ wss.on('connection', function connectionWebSocket(ws) {
         salas[salaId].salaId = salaId;
         salas[salaId].inicializaPipe();
         sala = salas[salaId];
-        join(msgJson.owner);
+        join(msgJson.owner, salaId);
         salas[salaId].sendState();
         parentPort && parentPort.postMessage({ type: "salaId", salaId: salaId});
         ws.send(JSON.stringify({ type: "host" }));
@@ -104,9 +104,9 @@ wss.on('connection', function connectionWebSocket(ws) {
     }
   }
 
-  function join(nome) {
+  function join(nome, salaId) {
     id = sala.novoJogador(async (arg) => ws.readyState === ws.OPEN && ws.send(arg), nome);
-    ws.send(JSON.stringify({ type: "id", id: id }));
+    ws.send(JSON.stringify({ type: "id", id: id, salaId: salaId }));
   }
 });
 

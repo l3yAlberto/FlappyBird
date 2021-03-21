@@ -56,13 +56,24 @@ export default function(mudarTela, args) {
                 font-size: 30px;`;
             this.span.className = "sel";
             div.appendChild(this.span);
-            div.appendChild(this.span);
+
+            const salaIdSpan = document.createElement('span');
+            salaIdSpan.unselectable = "off";
+            salaIdSpan.style = `
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                font-size: 18px;
+                opacity: 50%;`;
+            salaIdSpan.className = "sel";
+            div.appendChild(salaIdSpan);
 
             const self = this;
             const ws = new WebSocket(`ws://${args.ip}`);
             menuBt.onclick = () => {
                 this.span.remove();
                 rank.remove();
+                salaIdSpan.remove();
                 sprites.canvas.onclick = () => {};
                 if (ws && ws.readyState == ws.OPEN) {
                     ws.close();
@@ -96,6 +107,7 @@ export default function(mudarTela, args) {
                         break;
                     case "id":
                         self.id = message.id;
+                        salaIdSpan.innerText = message.salaId;
                         break;
                     case "host":
                         sprites.canvas.onclick = () => {
@@ -130,6 +142,7 @@ export default function(mudarTela, args) {
             ws.onclose = (event) => {
                 this.span.remove();
                 rank.remove();
+                salaIdSpan.remove();
                 mudarTela(menu(mudarTela));
             }
 

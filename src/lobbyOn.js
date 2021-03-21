@@ -45,7 +45,7 @@ export default function(mudarTela) {
                     div.remove();
                     ws && ws.readyState == ws.OPEN && ws.close();
                     mudarTela(game(mudarTela, { ip: input.value, host: true, nome: nome }));
-                } else alert("Digite seu nome!");
+                } else alert("Digite seu nome.");
             };
 
             div.appendChild(li);
@@ -81,7 +81,7 @@ export default function(mudarTela) {
                                     div.remove();
                                     ws && ws.readyState == ws.OPEN && ws.close();
                                     mudarTela(game(mudarTela, { ip: input.value, host: false, nome: nome, salaId: sala.salaId }));
-                                } else alert("Digite seu nome!");
+                                } else alert("Digite seu nome.");
                             };
                             div.appendChild(li);
                         }

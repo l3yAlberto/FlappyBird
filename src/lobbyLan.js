@@ -15,15 +15,15 @@ export default function(mudarTela) {
             };
 
             const input = document.createElement('input');
-            input.maxLength = '15';
-            input.placeholder = "Ip do servidor..."
+            input.placeholder = "IP:PORTA/ID -> Enter";
             input.onkeypress = (ev) => {
                 if (ev.code === "Enter") {
                     const nome = document.querySelector("#option > input").value;
-                    if (input.value && nome) {
+                    const ipPortaId = input.value.split('/');
+                    if (ipPortaId.length > 1 && nome) {
                         div.remove();
-                        mudarTela(game(mudarTela, { ip: input.value, host: false, nome: nome }));
-                    } else alert("Digite seu nome e ip do servidor!");
+                        mudarTela(game(mudarTela, { ip: ipPortaId[0], host: false, nome: nome, salaId: ipPortaId[1] }));
+                    } else alert("Digite seu nome e ip do servidor.");
                 }
             }
 
@@ -36,7 +36,7 @@ export default function(mudarTela) {
                     div.remove();
                     ipcRenderer.send('host', nome);
                     mudarTela(game(mudarTela, { ip: "localhost:8181", host: true, nome: nome }));
-                } else alert("Digite seu nome!");
+                } else alert("Digite seu nome.");
             };
 
             div.appendChild(li);
@@ -55,7 +55,7 @@ export default function(mudarTela) {
                         div.remove();
                         ipcRenderer.send('close');
                         mudarTela(game(mudarTela, { ip: `${args.ip}:8181`, host: false, nome: nome, salaId: args.salaId }));
-                    } else alert("Digite seu nome!");
+                    } else alert("Digite seu nome.");
                 };
                 div.appendChild(li);
             });
