@@ -16,6 +16,7 @@ export default function(mudarTela) {
 
             const div = document.getElementById('option');
             let ws;
+            
             menuBt.onclick = () => {
                 div.remove();
                 ws && ws.readyState == ws.OPEN && ws.close();
@@ -23,7 +24,6 @@ export default function(mudarTela) {
             };
 
             const input = document.createElement('input');
-            // input.maxLength = '15';
             input.placeholder = "IP:PORTA -> Enter";
             input.onkeypress = (ev) => {
                 if (ev.code === "Enter" && input.value) {
@@ -53,7 +53,7 @@ export default function(mudarTela) {
 
             function conectar(ip) {
 
-                if (ws?.close) ws.close();
+                ws?.close();
 
                 ws = new WebSocket(`ws://${ip}`);
 
@@ -64,9 +64,7 @@ export default function(mudarTela) {
                     ws.readyState == ws.OPEN && ws.send(JSON.stringify({ type: "salas" }));
                 }
     
-                ws.onclose = (ev) => {
-                    console.log('INFO: Socket Closed\n');
-                }
+                ws.onclose = (ev) => console.log('INFO: Socket Closed\n');
     
                 ws.onmessage = (event) => {
                     const message = JSON.parse(event.data);

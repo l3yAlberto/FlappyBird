@@ -5,8 +5,7 @@ import sprites from './sprites.js';
 export default function(mudarTela) {
     return {
         inicializa(){
-            const option = document.getElementById('option');
-            if (option) option.remove();
+            document.getElementById('option')?.remove();
 
             const menu = document.querySelector("#menu");
             menu.style = "visibility: hidden !important;";
@@ -34,26 +33,21 @@ export default function(mudarTela) {
             ipcRenderer.once("getUsername", (ev, args) => nick.value = args);
             ipcRenderer.send('getUsername');
 
-            lan.onclick = () => {
-                click();
-                mudarTela(lobbyLan(mudarTela));
-            };
+            lan.onclick = () => click(lobbyLan);
 
-            online.onclick = () => {
-                click();
-                mudarTela(lobbyOn(mudarTela));
-            };
-
-            function click() {
-                lan.remove();
-                online.remove();
-                menu.style = "";
-            }
+            online.onclick = () => click(lobbyOn);
 
             div.appendChild(nick);
             div.appendChild(lan);
             div.appendChild(online);
             gameDiv.appendChild(div);
+
+            function click(lobby) {
+                lan.remove();
+                online.remove();
+                menu.style = "";
+                mudarTela(lobby(mudarTela));
+            }
         },
         desenha(){
             sprites.desenhaFundo();

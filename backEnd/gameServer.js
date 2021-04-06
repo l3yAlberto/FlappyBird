@@ -38,11 +38,7 @@ module.exports = function() {
             jogador.pipe = this.pipes[0].x - jogador.game.x;
             this.lastId++;
             this.jogadores.push(jogador);
-            return jogador.game.id;
-        },
-        pulo(id) {
-            for (const jogador of this.jogadores) 
-                if (jogador.game.id === id && jogador.vivo) jogador.gravidade = -7;
+            return jogador;
         },
         attFlappy() {
             for (const jogador of this.jogadores) {
@@ -86,7 +82,6 @@ module.exports = function() {
         },
         stop() {
             this.break = true;
-            this.start = false;
             this.animation.break = true;
             this.animation.funcs.forEach((value, i) => this.animation.funcs[i] = this.animation.skip);
             this.animation.funcs = [];
@@ -110,7 +105,7 @@ module.exports = function() {
                     type: "game"
                 });
                 for (const jogador of this.jogadores) jogador.sendEvent(game);
-                // setTimeout(() => this.sendState(), 10);
+                setTimeout(() => this.sendState(), 10);
             } else {
                 for (const jogador of this.jogadores) jogador.sendEvent(`{"type":"endgame"}`);
                 this.stop();
@@ -120,7 +115,6 @@ module.exports = function() {
             if (this.break) return;
             this.attPipe();
             this.attFlappy();
-            this.sendState();
             this.animation.requestAnimationFrame(() => this.loop());
         }
     }
